@@ -1,0 +1,10 @@
+Webpack (import/exports)
+    Babel
+    Scss - препроцессор
+    Eslint - чистота кода
+    2 modes
+        - dev (dev serv, sourceMaps, eslint, not minified js & css)
+        - prod (minified code)
+Git
+    production
+    development
