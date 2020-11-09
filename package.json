@@ -1,0 +1,49 @@
+{
+  "name": "jsfrexcprj",
+  "version": "1.0.0",
+  "description": "Pure js excel application",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --hot --open",
+    "build": "cross-env NODE_ENV=production webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gelserkirchen/TablesJS.git"
+  },
+  "keywords": [
+    "js",
+    "javascript"
+  ],
+  "author": "Tolstykh <forsmapandtrash@list.ru>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gelserkirchen/TablesJS/issues"
+  },
+  "homepage": "https://github.com/Gelserkirchen/TablesJS#readme",
+  "private": true,
+  "browserslist": "> 0.25%, not dead",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.2.1",
+    "css-loader": "^5.0.0",
+    "eslint": "^7.13.0",
+    "eslint-config-google": "^0.14.0",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^1.2.1",
+    "sass": "^1.28.0",
+    "sass-loader": "^10.0.5",
+    "webpack": "^5.3.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.2",
+    "eslint-loader": "^4.0.2"
+  }
+}
