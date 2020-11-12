@@ -15,6 +15,7 @@ const jsLoaders = () => {
       loader: 'babel-loader',
       options: {
         presets: ['@babel/preset-env'],
+        plugins: [['@babel/plugin-proposal-class-properties', {'loose': true}]],
       },
     },
   ]
@@ -37,8 +38,23 @@ module.exports = {
   devServer: {
     port: 3000,
     hot: isDev,
+    // inline: false,
   },
+  // node: {
+  //   crypto: false,
+  // },
+  // browser: {
+  //   crypto: false,
+  // },
   resolve: {
+    // fallback: {
+    //   util: require.resolve('util/'),
+    //   path: require.resolve('path-browserify'),
+    //   crypto: require.resolve('crypto-browserify'),
+    //   stream: require.resolve('stream-browserify'),
+    //   buffer: require.resolve('buffer'),
+    //   vm: require.resolve('vm-browserify'),
+    // },
     extensions: ['.js'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
