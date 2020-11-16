@@ -12,35 +12,28 @@ export class Excel {
     // eslint-disable-next-line no-undef
     const $root = $.create('div', 'excel')
 
-    this.components.forEach(Component => {
+    this.components = this.components.map(Component => {
       const $el = $.create('div', Component.className);
       const component = new Component($el);
+      // DEBUG
+      // eslint-disable-next-line no-debugger
+      // debugger
+      // if (component.__proto__.constructor.name) {
+      //   window['c' + component.__proto__.constructor.name] = component
+      // }
       $el.html(component.toHTML());
       $root.append($el);
+      return component
     })
 
     return $root
   }
 
   render() {
-    // console.log(this.$el);
-    // this.$el.insertAdjacentHTML('afterbegin', `<h1>Test</h1>`);
     this.$el.append(this.getRoot());
+    this.components.forEach(component => {
+      component.init();
+    })
   }
 }
 
-
-// const $root = document.createElement('div');
-// $root.classList.add('excel');
-//
-// this.components.forEach(Component => {
-//
-// })
-// return $root;
-
-
-// const $el = document.createElement('div') // create div
-// $el.classList.add(Component.className); // add class to element
-// const component = new Component($el); // component from element
-// $el.innerHTML = component.toHTML(); // html from component
-// $root.append($el); // add element to render
