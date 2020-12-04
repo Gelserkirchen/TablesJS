@@ -10,6 +10,7 @@
   padding-bottom: 2px;
 
   .row{
+    position: relative;
     display: flex;
     flex-direction: row;
     min-height: 20px;
@@ -32,6 +33,7 @@
   }
 
   .column {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,8 +61,40 @@
 
     &.selected{
       border: none;
-      outline: 2px solid #3c74ff;
+      outline: 2px solid $primary-color;
       z-index: 2;
+    }
+  }
+
+  .row-resize, .col-resize {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: $primary-color;
+    opacity: 0;
+    z-index: 2000;
+
+    &:hover {
+      opacity: 1!important;
+    }
+  }
+
+  .row-resize {
+    left: 0;
+    height: 2px;
+    width: $info-cell-width;
+
+    &:hover {
+      cursor: row-resize;
+    }
+  }
+
+  .col-resize {
+    top: 0;
+    width: 2px;
+
+    &:hover {
+      cursor: col-resize;
     }
   }
 
