@@ -21,7 +21,7 @@ function toCell(_, col) {
 function createRow(numbers, content) {
   // eslint-disable-next-line max-len
   const rowResize = numbers ? '<div class="row-resize" data-resize="row"></div>' : '';
-  return `<div class="row">
+  return `<div class="row"  data-type="resizable" >
             <div class="row-info">
                 ${numbers}
                 ${rowResize}
