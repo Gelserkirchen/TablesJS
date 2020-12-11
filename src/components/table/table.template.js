@@ -14,8 +14,14 @@ function toColumn(col, index) {
           </div>`
 }
 
-function toCell(_, col) {
-  return `<div class="cell" contenteditable="true" data-col="${col}"></div>`
+function toCell(row) {
+  return function(_, col) {
+    return `<div class="cell" 
+                 contenteditable="true" 
+                 data-col="${col}" 
+                 data-type="cell"
+                 data-id="${row}:${col}"></div>`
+  }
 }
 
 function createRow(numbers, content) {
@@ -44,13 +50,13 @@ export function createTable(rowsCount = 15) {
   // debugger
   rows.push(createRow('', cols));
 
-  for (let i = 0; i < rowsCount; i++) {
+  for (let row = 0; row < rowsCount; row++) {
     const colsWithoutContent = new Array(colsCount)
         .fill('')
-        .map(toCell)
+        .map(toCell(row))
         .join('')
 
-    rows.push(createRow(i + 1, colsWithoutContent));
+    rows.push(createRow(row + 1, colsWithoutContent));
   }
 
   return rows.join('')
