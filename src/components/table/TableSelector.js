@@ -1,5 +1,3 @@
-import {$} from '@core/Dom';
-
 export class TableSelector {
   static selection = 'selected'
 
@@ -12,21 +10,18 @@ export class TableSelector {
     this.clearSelection()
     this.group.push($cell)
     this.current = $cell
-    $cell.addClasses(TableSelector.selection)
-    // $cell.classList.add(TableSelector.selection)
+    $cell.focus().addClasses(TableSelector.selection)
   }
 
-  selectGroup(rangeArray) {
+  selectGroup($rangeArray = []) {
     this.clearSelection()
-    rangeArray.map(el => {
-      const $cellOfRange = $(document.querySelector(`[data-id="${el}"]`))
-      $cellOfRange.addClasses(TableSelector.selection)
-      this.group.push($cellOfRange)
+    this.group = $rangeArray
+    $rangeArray.forEach($el => {
+      $el.addClasses(TableSelector.selection)
     })
   }
 
   clearSelection() {
-    // debugger
     this.group.forEach($el => $el.removeClasses(TableSelector.selection))
     this.group = []
   }

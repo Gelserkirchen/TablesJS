@@ -7,7 +7,7 @@ export function capitalize(string) {
 }
 
 export function range(start, end) {
-  // debugger
+  // v.55 (own realization)
   const arrayOfCells = []
 
   if (start.row > end.row) {

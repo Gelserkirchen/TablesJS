@@ -12,7 +12,7 @@ export class Table extends ExcelComponent {
 
   constructor($root) {
     super($root, {
-      listeners: ['mousedown', 'mouseup'],
+      listeners: ['mousedown', 'mouseup', 'keydown'],
     });
   }
 
@@ -26,8 +26,14 @@ export class Table extends ExcelComponent {
     } else if (isCell(event)) {
       const $target = $(event.target)
       if (event.shiftKey) {
-        const rangeArray = range(this.selector.current.id(), $target.id())
-        this.selector.selectGroup(rangeArray)
+        const target = $target.id(true);
+        const current = this.selector.current.id(true);
+        const cols = range(current, target);
+        const $cells = cols.map(el => {
+          return $(this.$root.find(`[data-id="${el}"]`))
+        })
+        console.log($cells)
+        this.selector.selectGroup($cells)
       } else {
         this.selector.select($target)
       }
@@ -41,6 +47,48 @@ export class Table extends ExcelComponent {
   }
 
   onMouseup(event) {
+  }
+
+  onKeydown(event) {
+    const KeydownEvents = [
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Enter',
+    ]
+
+    const currentCell = this.selector.current.id(true)
+    const key = event.key
+    if (KeydownEvents.includes(key) && !event.shiftKey) {
+      const $nextCell = $(this.$root
+          .find(this.keydownEventHandler(key, currentCell)))
+      this.selector.select($nextCell)
+    }
+  }
+
+  keydownEventHandler(key, {row, column}) {
+    const MIN_VALUE = 0
+
+    switch (key) {
+      case 'ArrowDown':
+      case 'Enter':
+        row++
+        break
+      case 'ArrowRight':
+      case 'Tab':
+        column++
+        break
+      case 'ArrowUp':
+        row != MIN_VALUE ? row-- : row
+        break
+      case 'ArrowLeft':
+        column != MIN_VALUE ? column-- : column
+        break
+    }
+
+    return `[data-id="${row}:${column}"]`
   }
 
   toHTML() {

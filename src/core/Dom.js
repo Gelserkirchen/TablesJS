@@ -52,13 +52,16 @@ class Dom {
     return this.$el.dataset
   }
 
-  id() {
-    const arrayOfdigits = this.data.id.split(':')
-    const obj = {
-      row: +arrayOfdigits[0],
-      column: +arrayOfdigits[1],
+  id(parse) {
+    if (parse) {
+      const arrayOfdigits = this.data.id.split(':')
+      const obj = {
+        row: +arrayOfdigits[0],
+        column: +arrayOfdigits[1],
+      }
+      return obj
     }
-    return obj
+    return this.data.id
   }
 
   findAll(selector) {
@@ -74,6 +77,11 @@ class Dom {
         .forEach(key => {
           this.$el.style[key] = styles[key]
         })
+  }
+
+  focus() {
+    this.$el.focus()
+    return this
   }
 
   addClasses(className) {
