@@ -6,6 +6,8 @@ export class ExcelComponent extends DomListener {
     super($root, options.listeners);
     // eslint-disable-next-line no-undef
     this.prepare()
+    this.emitter = options.emitter
+    console.log(options)
   }
 
   prepare() {}

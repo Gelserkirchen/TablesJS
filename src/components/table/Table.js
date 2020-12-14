@@ -10,9 +10,11 @@ import {range} from '@core/utils';
 export class Table extends ExcelComponent {
   static className = 'excel__table'
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
+      name: 'Table',
       listeners: ['mousedown', 'mouseup', 'keydown'],
+      emitter: options.emitter,
     });
   }
 
@@ -32,7 +34,6 @@ export class Table extends ExcelComponent {
         const $cells = cols.map(el => {
           return $(this.$root.find(`[data-id="${el}"]`))
         })
-        console.log($cells)
         this.selector.selectGroup($cells)
       } else {
         this.selector.select($target)
@@ -44,6 +45,8 @@ export class Table extends ExcelComponent {
     super.init();
     const $cell = $(this.$root.find('[data-id="0:0"]'))
     this.selector.select($cell)
+    this.emitter.subscribe('this is working',
+        data => this.selector.current.text(data))
   }
 
   onMouseup(event) {
