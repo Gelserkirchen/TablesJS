@@ -13,8 +13,8 @@ export class Table extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'mouseup', 'keydown'],
-      emitter: options.emitter,
+      listeners: ['mousedown', 'mouseup', 'keydown', 'input'],
+      ...options,
     });
   }
 
@@ -44,9 +44,18 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
     const $cell = $(this.$root.find('[data-id="0:0"]'))
-    this.selector.select($cell)
-    this.emitter.subscribe('this is working',
+    this.selectCell($cell)
+
+    this.$on('formula:input',
         data => this.selector.current.text(data))
+    this.$on('formula:done', () => {
+      this.selector.current.focus()
+    })
+  }
+
+  selectCell($cell) {
+    this.selector.select($cell)
+    this.$emit('table:select', $cell)
   }
 
   onMouseup(event) {
@@ -67,7 +76,7 @@ export class Table extends ExcelComponent {
     if (KeydownEvents.includes(key) && !event.shiftKey) {
       const $nextCell = $(this.$root
           .find(this.keydownEventHandler(key, currentCell)))
-      this.selector.select($nextCell)
+      this.selectCell($nextCell)
     }
   }
 
@@ -96,5 +105,9 @@ export class Table extends ExcelComponent {
 
   toHTML() {
     return createTable();
+  }
+
+  onInput(event) {
+    this.$emit('table:input', $(event.target))
   }
 }
