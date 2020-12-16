@@ -4,7 +4,6 @@ import {DomListener} from '@core/DomListener';
 export class ExcelComponent extends DomListener {
   constructor($root, options = {}) {
     super($root, options.listeners);
-    // eslint-disable-next-line no-undef
     this.prepare()
     this.emitter = options.emitter
     this.unsubscribers = []
