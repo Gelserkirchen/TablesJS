@@ -4,11 +4,14 @@ import {Toolbar} from '@/components/toolbar/Toolbar';
 import {Excel} from '@/components/excel/Excel'
 import {Table} from '@/components/table/Table';
 import './scss/index.scss'
+import {createState} from '@core/createState';
+import {rootReducer} from '@/redux/rootReducer';
 
-// eslint-disable-next-line no-undef
+const state = createState(rootReducer)
+
 const excel = new Excel('#app', {
-  // eslint-disable-next-line no-undef
   components: [Header, Toolbar, Formula, Table],
+  state,
 });
 
 excel.render();
