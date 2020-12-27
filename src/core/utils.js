@@ -21,3 +21,11 @@ export function range(start, end) {
   }
   return arrayOfCells
 }
+
+export function excelStorage(key, value = null) {
+  if (!value) {
+    return JSON.parse(localStorage.getItem(key))
+  } else {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
+}

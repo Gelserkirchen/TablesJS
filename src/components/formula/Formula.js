@@ -23,6 +23,10 @@ export class Formula extends ExcelComponent {
     this.$on('table:input', $target => {
       this.$dataOfFormula.text($target.text())
     })
+
+    this.$subscribe(state => {
+      // console.log('FormulaState', state)
+    })
   }
 
   toHTML() {
