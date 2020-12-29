@@ -3,7 +3,16 @@ const CODES = {
   Z: 90,
 }
 
-const DEFAULT_VALUE = 120
+const DEFAULT_WIDTH = 120
+const DEFAULT_HEIGHT = 25
+
+function getWidth(state, index) {
+  return (state[index] || DEFAULT_WIDTH) + 'px'
+}
+
+function getHeight(state, index) {
+  return (state[index] || DEFAULT_HEIGHT) + 'px'
+}
 
 function toChar(_, index) {
   return String.fromCharCode(CODES.A + index)
@@ -32,20 +41,20 @@ function toCell(state, row) {
   }
 }
 
-function createRow(numbers, content) {
-  // eslint-disable-next-line max-len
-  const rowResize = numbers ? '<div class="row-resize" data-resize="row"></div>' : '';
-  return `<div class="row"  data-type="resizable" >
+function createRow(index, content, state) {
+  const height = getHeight(state, index)
+  const rowResize = index ? `<div class="row-resize" 
+                                  data-resize="row" 
+                                  ></div>` : '';
+  return `<div class="row"  data-type="resizable" 
+                            data-row="${index}" 
+                            style="height: ${height}">
             <div class="row-info">
-                ${numbers}
+                ${index}
                 ${rowResize}
             </div>
             <div class="row-data">${content}</div>
           </div>`
-}
-
-function getWidth(state, index) {
-  return (state[index] || DEFAULT_VALUE) + 'px'
 }
 
 function withWidthFrom(state) {
@@ -67,8 +76,7 @@ export function createTable(rowsCount = 15, state = {}) {
       .map(toColumn)
       .join('')
 
-  // debugger
-  rows.push(createRow('', cols));
+  rows.push(createRow('', cols, {}));
 
   for (let row = 0; row < rowsCount; row++) {
     const colsWithoutContent = new Array(colsCount)
@@ -76,7 +84,7 @@ export function createTable(rowsCount = 15, state = {}) {
         .map(toCell(state, row))
         .join('')
 
-    rows.push(createRow(row + 1, colsWithoutContent));
+    rows.push(createRow(row + 1, colsWithoutContent, state.rowState));
   }
 
   return rows.join('')
