@@ -32,12 +32,14 @@ function toColumn({col, index, width}) {
 function toCell(state, row) {
   return function(_, col) {
     const width = getWidth(state.colState, col)
+    const id = `${row}:${col}`
+    const data = state.dataState[id] || ''
     return `<div class="cell" 
-                 contenteditable="true" 
+                 contenteditable="true"
                  data-col="${col}" 
                  data-type="cell"
-                 data-id="${row}:${col}"
-                 style="width: ${width}"></div>`
+                 data-id="${id}"
+                 style="width: ${width}">${data}</div>`
   }
 }
 
