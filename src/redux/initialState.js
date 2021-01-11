@@ -4,7 +4,7 @@ const defaultState = {
   colState: {},
   rowState: {},
   dataState: {},
-  realState: '',
+  currentText: '',
 }
 
 export const initialState = excelStorage('excel')

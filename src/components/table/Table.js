@@ -57,12 +57,13 @@ export class Table extends ExcelComponent {
     this.selectCell($cell)
 
     this.$on('formula:input',
-        data => this.selector.current.text(data))
+        text => {
+          this.selector.current.text(text)
+          this.updateTextInStore(text)
+        })
+
     this.$on('formula:done', () => {
       this.selector.current.focus()
-    })
-    this.$subscribe(state => {
-      // console.log('TableState', state)
     })
   }
 
@@ -121,7 +122,17 @@ export class Table extends ExcelComponent {
     return createTable(15, this.store.getState());
   }
 
+  updateTextInStore(value) {
+    this.$dispatch(actions.changeText({
+      id: this.selector.current.id(),
+      value,
+    }))
+  }
+
   onInput(event) {
-    this.$emit('table:input', $(event.target))
+    // this.$emit('table:input', $(event.target))
+    // debugger
+    // console.log($(event.target).$el.textContent)
+    this.updateTextInStore($(event.target).text())
   }
 }

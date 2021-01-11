@@ -2,6 +2,7 @@
 // import {Options as $el} from "webpack";
 import {$} from '@core/Dom';
 import {Emitter} from '@core/Emitter';
+import {StoreSubscriber} from '@core/StoreSubscriber';
 
 export class Excel {
   constructor(selector, options) {
@@ -9,6 +10,7 @@ export class Excel {
     this.components = options.components || []
     this.emitter = new Emitter()
     this.store = options.store
+    this.subscriber = new StoreSubscriber(this.store)
   }
 
   getRoot() {
@@ -31,6 +33,7 @@ export class Excel {
 
   render() {
     this.$el.append(this.getRoot());
+    this.subscriber.subscribeComponents(this.components)
     this.components.forEach(component => {
       component.init();
     })
