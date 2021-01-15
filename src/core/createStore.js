@@ -16,6 +16,9 @@ export function createStore(rootReducer, initialState = {}) {
       listeners.forEach(listener => listener(state))
     },
     getState() {
+      // eslint-disable-next-line max-len
+      // console.log('createStore.getState():', JSON.parse(JSON.stringify(state)))
+      // console.log('only state: ', state)
       return JSON.parse(JSON.stringify(state))
     },
   }

@@ -91,6 +91,13 @@ class Dom {
         })
   }
 
+  getStyles(styles = []) {
+    return styles.reduce((selectedCellAsAnObject, style) => {
+      selectedCellAsAnObject[style] = this.$el.style[style]
+      return selectedCellAsAnObject
+    }, {})
+  }
+
   focus() {
     this.$el.focus()
     return this

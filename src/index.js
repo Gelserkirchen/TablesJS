@@ -8,8 +8,16 @@ import {createStore} from '@core/createStore';
 import {rootReducer} from '@/redux/rootReducer';
 import {excelStorage} from '@core/utils';
 import {initialState} from '@/redux/initialState';
+import {applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk'
+import logger from 'redux-logger'
 
-const store = createStore(rootReducer, initialState)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const enhancer = composeEnhancers(
+    applyMiddleware(thunk, logger),
+);
+
+const store = createStore(rootReducer, initialState, enhancer)
 
 store.subscribe(state => {
   excelStorage('excel', state)

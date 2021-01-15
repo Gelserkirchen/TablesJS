@@ -7,6 +7,7 @@ import {isCell} from '@/components/table/table.functions';
 import {TableSelector} from '@/components/table/TableSelector';
 import {range} from '@core/utils';
 import * as actions from '@/redux/actions';
+import {defaultStyles} from '@/constants';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -65,12 +66,24 @@ export class Table extends ExcelComponent {
     this.$on('formula:done', () => {
       this.selector.current.focus()
     })
+
+    this.$on('table:applyStyles', value => {
+      console.log('go to table with value: ', value)
+      this.selector.applyStyle(value)
+      console.log('to ids: ', this.selector.selectedIds)
+      this.$dispatch(actions.applyStyles({
+        value,
+        ids: this.selector.selectedIds,
+      }))
+    })
   }
 
   selectCell($cell) {
     this.selector.select($cell)
     this.$emit('table:select', $cell)
-    // this.$dispatch({type: 'TEST'})
+    const styles = $cell.getStyles(Object.keys(defaultStyles))
+    console.log('Table. Styles to dispatch: ', styles)
+    this.$dispatch(actions.changeStyles(styles))
   }
 
   onMouseup(event) {
@@ -119,6 +132,8 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
+    const x = this.store.getState()
+    console.log('toHTML in Table.js', x)
     return createTable(15, this.store.getState());
   }
 
@@ -131,8 +146,6 @@ export class Table extends ExcelComponent {
 
   onInput(event) {
     // this.$emit('table:input', $(event.target))
-    // debugger
-    // console.log($(event.target).$el.textContent)
     this.updateTextInStore($(event.target).text())
   }
 }
