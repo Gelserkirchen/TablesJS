@@ -21,8 +21,18 @@ export class TableSelector {
     })
   }
 
+  get selectedIds() {
+    return this.group.map(element => element.id())
+  }
+
   clearSelection() {
     this.group.forEach($el => $el.removeClasses(TableSelector.selection))
     this.group = []
+  }
+
+  applyStyle(style) {
+    this.group.forEach(element => {
+      element.css(style)
+    })
   }
 }

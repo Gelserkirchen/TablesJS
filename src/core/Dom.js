@@ -6,6 +6,14 @@ class Dom {
       : selector
   }
 
+  attr(name, value) {
+    if (value) {
+      this.$el.setAttribute(name, value)
+      return this
+    }
+    return this.$el.getAttribute(name)
+  }
+
   html(html) {
     if (typeof html === 'string') {
       this.$el.innerHTML = html;
@@ -15,7 +23,7 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text !== 'undefined') {
       this.$el.textContent = text
       return this
     }
@@ -89,6 +97,13 @@ class Dom {
         .forEach(key => {
           this.$el.style[key] = styles[key]
         })
+  }
+
+  getStyles(styles = []) {
+    return styles.reduce((selectedCellAsAnObject, style) => {
+      selectedCellAsAnObject[style] = this.$el.style[style]
+      return selectedCellAsAnObject
+    }, {})
   }
 
   focus() {

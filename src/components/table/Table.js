@@ -6,6 +6,9 @@ import {shouldResize} from '@/components/table/table.functions';
 import {isCell} from '@/components/table/table.functions';
 import {TableSelector} from '@/components/table/TableSelector';
 import {range} from '@core/utils';
+import * as actions from '@/redux/actions';
+import {defaultStyles} from '@/constants';
+import {parse} from '@/core/parse';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -22,9 +25,18 @@ export class Table extends ExcelComponent {
     this.selector = new TableSelector()
   }
 
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(this.$root, event)
+      this.$dispatch(actions.tableResize(data))
+    } catch (e) {
+      console.warn('Resize table error', e.message)
+    }
+  }
+
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeHandler(this.$root, event)
+      this.resizeTable(event)
     } else if (isCell(event)) {
       const $target = $(event.target)
       if (event.shiftKey) {
@@ -36,7 +48,7 @@ export class Table extends ExcelComponent {
         })
         this.selector.selectGroup($cells)
       } else {
-        this.selector.select($target)
+        this.selectCell($target)
       }
     }
   }
@@ -47,15 +59,31 @@ export class Table extends ExcelComponent {
     this.selectCell($cell)
 
     this.$on('formula:input',
-        data => this.selector.current.text(data))
+        value => {
+          this.selector.current
+              .attr('data-value', value)
+              .text(parse(value))
+          this.updateTextInStore(value)
+        })
+
     this.$on('formula:done', () => {
       this.selector.current.focus()
+    })
+
+    this.$on('table:applyStyles', value => {
+      this.selector.applyStyle(value)
+      this.$dispatch(actions.applyStyles({
+        value,
+        ids: this.selector.selectedIds,
+      }))
     })
   }
 
   selectCell($cell) {
     this.selector.select($cell)
     this.$emit('table:select', $cell)
+    const styles = $cell.getStyles(Object.keys(defaultStyles))
+    this.$dispatch(actions.changeStyles(styles))
   }
 
   onMouseup(event) {
@@ -104,10 +132,20 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable();
+    const x = this.store.getState()
+    console.log('toHTML in Table.js', x)
+    return createTable(15, this.store.getState());
+  }
+
+  updateTextInStore(value) {
+    this.$dispatch(actions.changeText({
+      id: this.selector.current.id(),
+      value,
+    }))
   }
 
   onInput(event) {
-    this.$emit('table:input', $(event.target))
+    // this.$emit('table:input', $(event.target))
+    this.updateTextInStore($(event.target).text())
   }
 }
