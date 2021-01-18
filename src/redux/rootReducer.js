@@ -29,7 +29,6 @@ export function rootReducer(state, action) {
       })
       return {...state,
         [field]: val,
-        // currentStyles: {...state.currentStyles, title: action.data},
         currentStyles: {...state.currentStyles, ...action.data.value},
       }
     case CHANGE_TITLE:

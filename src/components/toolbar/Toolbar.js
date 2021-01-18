@@ -29,7 +29,6 @@ export class Toolbar extends ExcelStateComponent {
   }
 
   storeChanged(changes) {
-    console.log('changes in Toolbar: ', changes.currentStyles)
     this.setState(changes.currentStyles)
   }
 

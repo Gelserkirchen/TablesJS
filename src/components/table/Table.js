@@ -8,6 +8,7 @@ import {TableSelector} from '@/components/table/TableSelector';
 import {range} from '@core/utils';
 import * as actions from '@/redux/actions';
 import {defaultStyles} from '@/constants';
+import {parse} from '@/core/parse';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -58,9 +59,11 @@ export class Table extends ExcelComponent {
     this.selectCell($cell)
 
     this.$on('formula:input',
-        text => {
-          this.selector.current.text(text)
-          this.updateTextInStore(text)
+        value => {
+          this.selector.current
+              .attr('data-value', value)
+              .text(parse(value))
+          this.updateTextInStore(value)
         })
 
     this.$on('formula:done', () => {
@@ -68,9 +71,7 @@ export class Table extends ExcelComponent {
     })
 
     this.$on('table:applyStyles', value => {
-      console.log('go to table with value: ', value)
       this.selector.applyStyle(value)
-      console.log('to ids: ', this.selector.selectedIds)
       this.$dispatch(actions.applyStyles({
         value,
         ids: this.selector.selectedIds,
@@ -82,7 +83,6 @@ export class Table extends ExcelComponent {
     this.selector.select($cell)
     this.$emit('table:select', $cell)
     const styles = $cell.getStyles(Object.keys(defaultStyles))
-    console.log('Table. Styles to dispatch: ', styles)
     this.$dispatch(actions.changeStyles(styles))
   }
 
