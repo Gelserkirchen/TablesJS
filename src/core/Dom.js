@@ -34,11 +34,6 @@ class Dom {
     return this.$el.textContent.trim()
   }
 
-  clear() {
-    this.html('')
-    return this
-  }
-
   on(eventType, callback) {
     // this.$$listeners[eventType] = callback;
     this.$el.addEventListener(eventType, callback)
@@ -58,6 +53,11 @@ class Dom {
     } else {
       this.$el.appendChild(node)
     }
+  }
+
+  clear() {
+    this.html('')
+    return this
   }
 
   closest(selector) {
