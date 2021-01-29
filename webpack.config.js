@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HTMLWebPackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -38,23 +39,9 @@ module.exports = {
   devServer: {
     port: 3000,
     hot: isDev,
-    // inline: false,
+    inline: false,
   },
-  // node: {
-  //   crypto: false,
-  // },
-  // browser: {
-  //   crypto: false,
-  // },
   resolve: {
-    // fallback: {
-    //   util: require.resolve('util/'),
-    //   path: require.resolve('path-browserify'),
-    //   crypto: require.resolve('crypto-browserify'),
-    //   stream: require.resolve('stream-browserify'),
-    //   buffer: require.resolve('buffer'),
-    //   vm: require.resolve('vm-browserify'),
-    // },
     extensions: ['.js'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -79,6 +66,9 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: filename('css'),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
   ],
   module: {

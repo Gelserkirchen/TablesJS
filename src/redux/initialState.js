@@ -20,5 +20,6 @@ const normalize = state => ({
 })
 
 export function normalizeInitialState(state) {
+  // debugger
   return state ? normalize(state) : clone(defaultState)
 }
