@@ -39,7 +39,7 @@ export function rootReducer(state, action) {
       return {...state, title: action.data.value}
 
     case UPDATE_DATE:
-      debugger
+      // debugger
       return {...state, openedDate: new Date().toJSON}
     default: return state
   }

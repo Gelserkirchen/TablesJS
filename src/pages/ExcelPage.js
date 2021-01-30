@@ -1,6 +1,5 @@
-import {Page} from '@core/Page';
-import {applyMiddleware, compose} from 'redux';
-import {debounce, excelStorage} from '@core/utils';
+import {Page} from '@core/page/Page';
+// import {debounce, excelStorage} from '@core/utils';
 import {createStore} from '@core/store/createStore';
 import {rootReducer} from '@/redux/rootReducer';
 import {normalizeInitialState} from '@/redux/initialState';
@@ -9,35 +8,28 @@ import {Toolbar} from '@/components/toolbar/Toolbar';
 import {Formula} from '@/components/formula/Formula';
 import {Table} from '@/components/table/Table';
 import {Excel} from '@/components/excel/Excel';
-import {logger} from 'redux-logger';
-import thunk from 'redux-thunk';
-
-function storageName(param) {
-  console.log('param in ExcelPage:', param)
-  return 'excel:' + param
-}
+// import {excelStorage} from '@core/utils';
+import {StateProcessor} from '@core/page/StateProcessor';
+import {LocalStorageClient} from '@/shared/LocalStorageClient';
 
 export class ExcelPage extends Page {
-  getRoot() {
-    const params = this.params ? this.params : Date.now().toString()
+  constructor(param) {
+    super(param);
 
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-      || compose;
-    const enhancer = composeEnhancers(
-        applyMiddleware(thunk, logger),
-    );
-    console.log('this.params', params)
+    this.storeSub = null
+    this.processor = new StateProcessor(
+        new LocalStorageClient(this.params),
+        400
+    )
+  }
 
-    const state = excelStorage(storageName(params))
-    const store = createStore(rootReducer,
-        normalizeInitialState(state), enhancer)
+  async getRoot() {
+    const state = await this.processor.get()
+    const initialState = normalizeInitialState(state)
+    const store = createStore(rootReducer, initialState)
 
-    const stateListener = debounce(state => {
-      // console.log('index.js, state: ', state)
-      excelStorage(storageName(params), state)
-    }, 300)
 
-    store.subscribe(stateListener)
+    this.storeSub = store.subscribe(this.processor.listen)
 
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
@@ -53,5 +45,6 @@ export class ExcelPage extends Page {
 
   destroy() {
     this.excel.destroy()
+    this.storeSub.unsubscribe()
   }
 }
