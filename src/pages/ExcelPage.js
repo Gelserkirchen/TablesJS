@@ -1,7 +1,7 @@
-import {Page} from '@/pages/Page';
+import {Page} from '@core/Page';
 import {applyMiddleware, compose} from 'redux';
 import {debounce, excelStorage} from '@core/utils';
-import {createStore} from '@core/createStore';
+import {createStore} from '@core/store/createStore';
 import {rootReducer} from '@/redux/rootReducer';
 import {normalizeInitialState} from '@/redux/initialState';
 import {Header} from '@/components/header/Header';
